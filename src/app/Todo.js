@@ -4,21 +4,39 @@ export class Todo extends Component {
   constructor() {
     super();
     this.state = {
-      nums: [1, 2, 3, 4]
+      todos: [],
+      newTodo: ""
     };
   }
-  handleClick(e) {
-    const nums = [...this.state.nums, 6];
 
-    this.setState({ nums });
+  handleChange(e) {
+    const { value } = e.target;
+    this.setState({ newTodo: value });
   }
+
+  handleClick(e) {
+    e.preventDefault();
+    const todos = [...this.state.todos, this.input.value];
+    this.input.value = "";
+    this.setState({ todos });
+  }
+
   render() {
     return (
       <div>
-        <button onClick={this.handleClick.bind(this)}>click</button>
-        {this.state.nums.map(num => (
-          <h3 key={num}>{num}</h3>
-        ))}
+        <form>
+          <input
+            ref={node => (this.input = node)}
+            type="text"
+            placeholder="new todo"
+          />
+          <button onClick={this.handleClick.bind(this)}>create</button>
+        </form>
+        <ul>
+          {this.state.todos.map(todo => (
+            <li>{todo}</li>
+          ))}
+        </ul>
       </div>
     );
   }
